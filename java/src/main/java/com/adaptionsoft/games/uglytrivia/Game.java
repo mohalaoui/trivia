@@ -25,7 +25,6 @@ public class Game {
 	}
 
 	public void add(String playerName) {
-
 		Player player = new Player(playerName);
 		players.add(player);
 
@@ -37,26 +36,21 @@ public class Game {
 		printCurrentPlayerInfos(roll);
 
 		if (players.currentPlayer().isInPenaltyBox()) {
-			if (isRollMultiplierOfTwo(roll)) {
+			if (isMultiplierOfTwo(roll)) {
 				playerStaysInPenaltyBox();
 				return;
 			}
 			playerGetOutOfPenaltyBox();
 		}
 
-		players.currentPlayer().newLocation(roll);
-		questionHandler.getQuestionCategory(players.currentPlayer().getPlace());
-		questionHandler.askQuestion(players.currentPlayer().getPlace());
-	}
-
-	private boolean isRollMultiplierOfTwo(int roll) {
-		return roll % 2 == 0;
+		players.currentPlayer().computeNewLocation(roll);
+		questionHandler.askQuestionByCategory(players.currentPlayer().getPlace());
 	}
 
 	public boolean wasCorrectlyAnswered() {
 		boolean result = true;
 		if (players.currentPlayer().isInPenaltyBox()) {
-			if (isGettingOutOfPenaltyBox) {
+			if (isGettingOutOfPenaltyBoxDecision()) {
 				System.out.println(ANSWER_WAS_CORRECT);
 				result = checkForWinner();
 			}
@@ -81,23 +75,35 @@ public class Game {
 		return true;
 	}
 
+	private boolean isMultiplierOfTwo(int roll) {
+		return roll % 2 == 0;
+	}
+
 	private void printCurrentPlayerInfos(int roll) {
 		System.out.println(players.currentPlayer().getName() + IS_THE_CURRENT_PLAYER);
 		System.out.println(THEY_HAVE_ROLLED_A + roll);
 	}
 
 	private void playerStaysInPenaltyBox() {
+		setGettingOutOfPenaltyBoxDecision(false);
 		System.out.println(players.currentPlayer().getName() + IS_NOT_GETTING_OUT_OF_THE_PENALTY_BOX);
-		isGettingOutOfPenaltyBox = false;
 	}
 
 	private void playerGetOutOfPenaltyBox() {
-		isGettingOutOfPenaltyBox = true;
+		setGettingOutOfPenaltyBoxDecision(true);
 		System.out.println(players.currentPlayer().getName() + IS_GETTING_OUT_OF_THE_PENALTY_BOX);
 	}
 
 	private void printWrongAnswerMessage() {
 		System.out.println(QUESTION_WAS_INCORRECTLY_ANSWERED);
 		System.out.println(players.currentPlayer().getName() + WAS_SENT_TO_THE_PENALTY_BOX);
+	}
+
+	public boolean isGettingOutOfPenaltyBoxDecision() {
+		return isGettingOutOfPenaltyBox;
+	}
+
+	public void setGettingOutOfPenaltyBoxDecision(boolean isGettingOutOfPenaltyBox) {
+		this.isGettingOutOfPenaltyBox = isGettingOutOfPenaltyBox;
 	}
 }

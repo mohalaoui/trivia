@@ -51,7 +51,7 @@ public class Player {
 		System.out.println(name + NOW_HAS + coins + GOLD_COINS);
 	}
 	
-	public void newLocation(int roll) {
+	public void computeNewLocation(int roll) {
 		incrementPlaceWith(roll);
 		if (place >= 12) {
 			decrementPlaceWith(12);

@@ -38,12 +38,17 @@ public class QuestionHandler {
 		}
 	}
 	
-	public void askQuestion(int place) {
+	private void askQuestion(int place) {
 		System.out.println(questionsByCategory.get(Category.valueOf(currentCategory(place))).remove(0));
 	}
 
-	public void getQuestionCategory(int place) {
+	private void getQuestionCategory(int place) {
 		System.out.println(THE_CATEGORY_IS + currentCategory(place));
+	}
+	
+	public void askQuestionByCategory(int place) {
+		getQuestionCategory(place);
+		askQuestion(place);
 	}
 	
 	private String currentCategory(int place) {
